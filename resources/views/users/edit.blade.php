@@ -22,6 +22,21 @@
         {{ Form::email('email', null, array('class' => 'form-control')) }}
     </div>
 
+    <div class="form-group">
+        {{ Form::label('gender', 'Gender') }}
+        {{ Form::text('gender', null, array('class' => 'form-control')) }}
+    </div>
+
+    <div class="form-group">
+        {{ Form::label('birth_date', 'Birth Date') }}
+        {{ Form::text('birth_date', '', array('id' => 'birth_date', 'class' => 'form-control')) }}
+    </div>
+
+    <div class="form-group">
+        {{ Form::label('address', 'Address') }}
+        {{ Form::text('address', null, array('class' => 'form-control')) }}
+    </div>
+
     <h5><b>Give Role</b></h5>
 
     <div class='form-group'>
@@ -51,3 +66,4 @@
 </div>
 
 @endsection
+
