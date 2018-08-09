@@ -115,13 +115,15 @@
     <script>
         $(function() {
             $( "#birth_date" ).datepicker({
-                format: 'dd/mm/yyyy',
+                dateFormat: 'dd/mm/yy',
                 weekStart: 0,
                 calendarWeeks: true,
                 autoclose: true,
                 todayHighlight: true,
                 rtl: true,
-                orientation: "auto"
+                orientation: "auto",
+                changeMonth: true,
+                changeYear: true
             });
         });
     </script>

@@ -23,6 +23,21 @@
         {{ Form::email('email', '', array('class' => 'form-control')) }}
     </div>
 
+    <div class="form-group">
+        {{ Form::label('gender', 'Gender') }}
+        {{ Form::select('gender', array('M' => 'Male', 'F' => 'Female'), 'M') }}
+    </div>
+
+    <div class="form-group">
+        {{ Form::label('birth_date', 'Birth Date') }}
+        {{ Form::text('birth_date', '', array('id' => 'birth_date', 'class' => 'form-control')) }}
+    </div>
+
+    <div class="form-group">
+        {{ Form::label('address', 'Address') }}
+        {{ Form::textarea('address',null,['class'=>'form-control', 'rows' => 3, 'cols' => 40]) }}
+    </div>
+
     <div class='form-group'>
         @foreach ($roles as $role)
             {{ Form::checkbox('roles[]',  $role->id ) }}

@@ -51,10 +51,11 @@ class UserController extends Controller
         $this->validate($request, [
             'name'=>'required|max:120',
             'email'=>'required|email|unique:users',
-            'password'=>'required|min:6|confirmed'
+            'password'=>'required|min:6|confirmed',
+            'gender'=>'required',   
         ]);
 
-        $user = User::create($request->only('email', 'name', 'password'));
+        $user = User::create($request->only('email', 'name', 'password', 'gender', 'birth_date', 'address'));
 
         $roles = $request['roles'];
 
@@ -110,10 +111,13 @@ class UserController extends Controller
         $this->validate($request, [
             'name'=>'required|max:120',
             'email'=>'required|email|unique:users,email,'.$id,
-            'password'=>'required|min:6|confirmed'
+            'password'=>'required|min:6|confirmed',
+            'gender'=>'required',            
         ]);
 
-        $input = $request->only(['name', 'email', 'password']);
+        $input = $request->only(['name', 'email', 'password', 'gender', 'birth_date', 'address']);
+        $input['birth_date'] = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('birth_date'));
+
         $roles = $request['roles'];
         $user->fill($input)->save();
 

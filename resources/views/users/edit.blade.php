@@ -24,7 +24,7 @@
 
     <div class="form-group">
         {{ Form::label('gender', 'Gender') }}
-        {{ Form::text('gender', null, array('class' => 'form-control')) }}
+        {{ Form::select('gender', array('M' => 'Male', 'F' => 'Female'), 'M') }}
     </div>
 
     <div class="form-group">
@@ -34,7 +34,7 @@
 
     <div class="form-group">
         {{ Form::label('address', 'Address') }}
-        {{ Form::text('address', null, array('class' => 'form-control')) }}
+        {{ Form::textarea('address',null,['class'=>'form-control', 'rows' => 3, 'cols' => 40]) }}
     </div>
 
     <h5><b>Give Role</b></h5>
