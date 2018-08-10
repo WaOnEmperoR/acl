@@ -94,8 +94,12 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $roles = Role::get();
 
+        $preformat_birth_date = \Carbon\Carbon::createFromFormat('Y-m-d', $user->birth_date);
+        $postformat_birth_date = $preformat_birth_date->format('d/m/Y');
+
+        $user->birth_date = $postformat_birth_date; 
+
         return view('users.edit', compact('user', 'roles'));
-        // return view('users.coba', compact('user', 'roles'));
     }
 
     /**

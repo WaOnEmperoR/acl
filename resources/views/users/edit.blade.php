@@ -24,12 +24,12 @@
 
     <div class="form-group">
         {{ Form::label('gender', 'Gender') }}
-        {{ Form::select('gender', array('M' => 'Male', 'F' => 'Female'), 'M') }}
+        {{ Form::select('gender', array('M' => 'Male', 'F' => 'Female'), $user->gender) }}
     </div>
 
     <div class="form-group">
         {{ Form::label('birth_date', 'Birth Date') }}
-        {{ Form::text('birth_date', '', array('id' => 'birth_date', 'class' => 'form-control')) }}
+        {{ Form::text('birth_date', null, array('id' => 'birth_date', 'class' => 'form-control')) }}
     </div>
 
     <div class="form-group">
