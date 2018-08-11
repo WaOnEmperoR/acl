@@ -4,11 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Http\Requests;
+
 use App\User;
 use Auth;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Session;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Response;
+use Intervention\Image\Facades\Image;
 
 class UserController extends Controller
 {
@@ -119,8 +124,21 @@ class UserController extends Controller
             'gender'=>'required',            
         ]);
 
+        $file = Input::file('avatar');
+        // $fileName = time() . '-' . $file->getClientOriginalName();
+        //echo($file);    
+        //exit();
+        $img = Image::make($file);
+        Response::make($img->encode('jpeg'));
+
         $input = $request->only(['name', 'email', 'password', 'gender', 'birth_date', 'address']);
         $input['birth_date'] = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('birth_date'));
+        $input['img_avatar'] = $img;
+
+        // echo("<pre>");
+        // print_r($input);
+        // echo("</pre>");
+        // exit();
 
         $roles = $request['roles'];
         $user->fill($input)->save();
@@ -150,5 +168,16 @@ class UserController extends Controller
         return redirect()->route('users.index')
             ->with('flash_message',
              'User successfully deleted.');
+    }
+
+    public function image($id){
+        $user = User::find($id);
+
+        $pic = Image::make($user->img_avatar);
+        $response = Response::make($pic->encode('jpeg'));
+        $response->header('Content-Type','image/jpeg');
+
+        return $response;
+
     }
 }

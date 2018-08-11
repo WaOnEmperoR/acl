@@ -10,7 +10,7 @@
     <hr>
     {{-- @include ('errors.list') --}}
 
-    {{ Form::model($user, array('route' => array('users.update', $user->id), 'method' => 'PUT')) }} {{-- Form model binding to automatically populate our fields with user data --}}
+    {{ Form::model($user, array('route' => array('users.update', $user->id), 'method' => 'PUT', 'files'=>true)) }} {{-- Form model binding to automatically populate our fields with user data --}}
 
     <div class="form-group">
         {{ Form::label('name', 'Name') }}
@@ -22,6 +22,12 @@
         {{ Form::email('email', null, array('class' => 'form-control')) }}
     </div>
 
+    <div class="form-group">
+        {!! Form::label('avatar', 'Profile Avatar') !!}
+        {!! Form::file('avatar') !!}
+        <img src="image">
+    </div>
+    
     <div class="form-group">
         {{ Form::label('gender', 'Gender') }}
         {{ Form::select('gender', array('M' => 'Male', 'F' => 'Female'), $user->gender) }}

@@ -21,6 +21,8 @@ Auth::routes();
 //
 Route::get('/', 'PostController@index')->name('home');
 
+Route::get('users/{id}/image', 'UserController@image');
+
 Route::resource('users', 'UserController');
 
 Route::resource('roles', 'RoleController');
