@@ -11,7 +11,7 @@
 
     {{-- @include ('errors.list') --}}
 
-    {{ Form::open(array('url' => 'users')) }}
+    {{ Form::open(array('url' => 'users', 'files'=>true)) }}
 
     <div class="form-group">
         {{ Form::label('name', 'Name') }}
@@ -21,6 +21,11 @@
     <div class="form-group">
         {{ Form::label('email', 'Email') }}
         {{ Form::email('email', '', array('class' => 'form-control')) }}
+    </div>
+
+    <div class="form-group">
+        {!! Form::label('avatar', 'Profile Avatar') !!}
+        {!! Form::file('avatar') !!}
     </div>
 
     <div class="form-group">

@@ -57,11 +57,29 @@ class UserController extends Controller
             'name'=>'required|max:120',
             'email'=>'required|email|unique:users',
             'password'=>'required|min:6|confirmed',
-            'gender'=>'required',   
+            'gender'=>'required',
+            'img_avatar'=>'mimes:jpeg,bmp,png|size:2048',   
         ]);
 
-        $user = User::create($request->only('email', 'name', 'password', 'gender', 'birth_date', 'address'));
+        $file = Input::file('avatar');
+        $img = Image::make($file);
+        // resize image to 300x400 and keep the aspect ratio
+        $img->resize(300, 400, function ($constraint) {
+            $constraint->aspectRatio();
+        });
+        Response::make($img->encode('jpeg'));
 
+        $user = new User();
+        $user->name = $request['name'];
+        $user->email = $request['email'];
+        $user->password = $request['password'];
+        $user->gender = $request['gender'];
+        $user->birth_date = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('birth_date'));
+        $user->img_avatar = $img;
+        $user->address = $request['address'];
+
+        $user->save();
+  
         $roles = $request['roles'];
 
         if (isset($roles)) {
@@ -121,24 +139,21 @@ class UserController extends Controller
             'name'=>'required|max:120',
             'email'=>'required|email|unique:users,email,'.$id,
             'password'=>'required|min:6|confirmed',
-            'gender'=>'required',            
+            'gender'=>'required',
+            'img_avatar'=>'mimes:jpeg,bmp,png|size:2048',            
         ]);
 
         $file = Input::file('avatar');
-        // $fileName = time() . '-' . $file->getClientOriginalName();
-        //echo($file);    
-        //exit();
         $img = Image::make($file);
+        // resize image to 300x400 and keep the aspect ratio
+        $img->resize(300, 400, function ($constraint) {
+            $constraint->aspectRatio();
+        });
         Response::make($img->encode('jpeg'));
-
+        
         $input = $request->only(['name', 'email', 'password', 'gender', 'birth_date', 'address']);
         $input['birth_date'] = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('birth_date'));
         $input['img_avatar'] = $img;
-
-        // echo("<pre>");
-        // print_r($input);
-        // echo("</pre>");
-        // exit();
 
         $roles = $request['roles'];
         $user->fill($input)->save();
