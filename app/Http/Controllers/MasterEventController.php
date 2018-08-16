@@ -88,7 +88,7 @@ class MasterEventController extends Controller
      */
     public function edit($id)
     {
-        $master_event = Post::findOrFail($id);
+        $master_event = MasterEvent::findOrFail($id);
 
         return view('master_events.edit', compact('master_event'));
     }
@@ -110,8 +110,8 @@ class MasterEventController extends Controller
         $master_event->type_event_name = $request->input('type_event_name');
         $master_event->save();
 
-        return redirect()->route('master_events.show', 
-            $master_event->id)->with('flash_message', 
+        return redirect()->route('master_events.index', 
+            $master_event->master_event_id)->with('flash_message', 
             'Article, '. $master_event->type_event_name.' updated');
     }
 }
