@@ -114,4 +114,20 @@ class MasterEventController extends Controller
             $master_event->master_event_id)->with('flash_message', 
             'Article, '. $master_event->type_event_name.' updated');
     }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $master_event = MasterEvent::findOrFail($id);
+        $master_event->delete();
+
+        return redirect()->route('master_events.index')
+            ->with('flash_message',
+             'Master Event successfully deleted.');
+    }
 }

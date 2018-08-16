@@ -114,7 +114,7 @@
     <!-- Scripts -->
     <script>
         $(function() {
-            $( "#birth_date" ).datepicker({
+            $( ".mydatepicker" ).datepicker({
                 dateFormat: 'dd/mm/yy',
                 weekStart: 0,
                 calendarWeeks: true,

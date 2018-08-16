@@ -32,3 +32,5 @@ Route::resource('permissions', 'PermissionController');
 Route::resource('posts', 'PostController');
 
 Route::resource('master_events', 'MasterEventController');
+
+Route::resource('payment_sessions', 'PaymentSessionController');
