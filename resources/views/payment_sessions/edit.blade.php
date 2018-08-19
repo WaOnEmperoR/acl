@@ -13,6 +13,11 @@
     {{ Form::model($payment_session, array('route' => array('payment_sessions.update', $payment_session->payment_session_id), 'method' => 'PUT')) }} {{-- Form model binding to automatically populate our fields with user data --}}
 
     <div class="form-group">
+        {{ Form::label('payment_session_name', 'Payment Session Name') }}
+        {{ Form::text('payment_session_name', '', array('class' => 'form-control')) }}
+    </div>
+    
+    <div class="form-group">
         {{ Form::label('payment_start_date', 'Payment Start Date') }}
         {{ Form::text('payment_start_date', null, array('id' => 'payment_start_date', 'class' => 'form-control mydatepicker')) }}
     </div>

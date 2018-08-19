@@ -29,7 +29,7 @@ class PaymentSessionController extends Controller
      */
     public function index()
     {
-        $payment_sessions = PaymentSession::orderby('payment_session_id', 'desc')->paginate(10);
+        $payment_sessions = PaymentSession::orderby('payment_session_id', 'asc')->paginate(10);
         return view('payment_sessions.index', compact('payment_sessions'));
     }
 
@@ -52,12 +52,14 @@ class PaymentSessionController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
+            'payment_session_name'=>'required',
             'payment_start_date'=>'required',
             'payment_finish_date'=>'required',
         ]);
 
         $payment_session = new PaymentSession();
 
+        $payment_session->payment_session_name = $request->input('payment_session_name');
         $payment_session->payment_start_date = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('payment_start_date'));
         $payment_session->payment_finish_date = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('payment_finish_date'));
 
@@ -111,18 +113,20 @@ class PaymentSessionController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
+            'payment_session_name'=>'required',
             'payment_start_date'=>'required',
             'payment_finish_date'=>'required',
         ]);
 
         $payment_session = PaymentSession::findOrFail($id);
+        $payment_session->payment_session_name = $request->input('payment_session_name');
         $payment_session->payment_start_date = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('payment_start_date'));
         $payment_session->payment_finish_date = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('payment_finish_date'));
         $payment_session->save();
 
         return redirect()->route('payment_sessions.index', 
             $payment_session->payment_session_id)->with('flash_message', 
-            'Article, '. $payment_session->type_event_name.' updated');
+            'Payment Session, '. $payment_session->payment_session_name.' updated');
     }
 
     /**

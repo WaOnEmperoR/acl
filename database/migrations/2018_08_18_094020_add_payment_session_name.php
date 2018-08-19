@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePaymentSessionsTable extends Migration
+class AddPaymentSessionName extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class CreatePaymentSessionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('payment_sessions', function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
+        Schema::table('payment_sessions', function($table) {
+            $table->string('payment_session_name');
         });
     }
 
@@ -26,6 +25,8 @@ class CreatePaymentSessionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payment_sessions');
+        Schema::table('payment_sessions', function($table) {
+            $table->dropColumn('payment_session_name');
+        });
     }
 }

@@ -14,6 +14,11 @@
     {{ Form::open(array('url' => 'payment_sessions')) }}
 
     <div class="form-group">
+        {{ Form::label('payment_session_name', 'Payment Session Name') }}
+        {{ Form::text('payment_session_name', '', array('class' => 'form-control')) }}
+    </div>
+
+    <div class="form-group">
         {{ Form::label('payment_start_date', 'Payment Start Date') }}
         {{ Form::text('payment_start_date', '', array('id' => 'payment_start_date', 'class' => 'form-control mydatepicker')) }}
     </div>

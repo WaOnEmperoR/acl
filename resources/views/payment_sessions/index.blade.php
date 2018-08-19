@@ -14,6 +14,7 @@
             <thead>
                 <tr>
                     <th>No</th>
+                    <th>Payment Session Name</th>
                     <th>Payment Start Date</th>
                     <th>Payment Finish Date</th>
                     <th>Date/Time Added</th>
@@ -27,7 +28,8 @@
             <tbody>
                 @foreach ($payment_sessions as $payment_session)
                 <tr>
-                    <td>{{ $counter }}</td>    
+                    <td>{{ $counter }}</td>
+                    <td>{{ $payment_session->payment_session_name }}</td>    
                     <td>{{ $payment_session->payment_start_date }}</td>
                     <td>{{ $payment_session->payment_finish_date }}</td>
                     <td>{{ $payment_session->created_at->format('F d, Y h:ia') }}</td>
