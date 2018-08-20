@@ -34,3 +34,5 @@ Route::resource('posts', 'PostController');
 Route::resource('master_events', 'MasterEventController');
 
 Route::resource('payment_sessions', 'PaymentSessionController');
+
+Route::resource('payment_types', 'PaymentTypeController');
