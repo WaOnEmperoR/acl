@@ -192,7 +192,8 @@ class UserController extends Controller
         $response = Response::make($pic->encode('jpeg'));
         $response->header('Content-Type','image/jpeg');
 
-        return $response;
-
+        return $response;        
     }
+
+
 }

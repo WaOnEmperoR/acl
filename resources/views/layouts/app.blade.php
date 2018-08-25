@@ -27,10 +27,11 @@
     </script>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="{{ asset('js/moment.js') }}"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
-    <script src="{{ asset('js/moment.js') }}"></script>
-    <script src="{{ asset('jscollapse.js') }}"></script>
+    
+    <script src="{{ asset('js/collapse.js') }}"></script>
     <script src="{{ asset('js/transition.js') }}"></script>
     <script src="https://use.fontawesome.com/9712be8772.js"></script>
 </head>
@@ -135,8 +136,9 @@
                     time: "fa fa-clock-o",
                     date: "fa fa-calendar",
                     up: "fa fa-arrow-up",
-                    down: "fa fa-arrow-down"
-                }
+                    down: "fa fa-arrow-down",
+                },
+                format: 'DD/MM/YYYY HH:mm'
             });
         });
     </script>

@@ -33,8 +33,8 @@
                     <td>{{ $counter }}</td>
                     <td>{{ $event->event_name }}</td>
                     <td>{{ $event->event_place }}</td>     
-                    <td>{{ $event->event_start->format('F d, Y h:ia') }}</td>
-                    <td>{{ $event->event_finish->format('F d, Y h:ia') }}</td>
+                    <td>{{ $event->event_start }}</td>
+                    <td>{{ $event->event_finish }}</td>
                     <td>{{ $event->event_type }}</td>
                     <td>{{ $event->user_id }}</td>    
                     <td>{{ $event->created_at->format('F d, Y h:ia') }}</td>
