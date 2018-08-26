@@ -21,6 +21,18 @@ Auth::routes();
 //
 Route::get('/', 'PostController@index')->name('home');
 
+Route::get('username/{id}', function ($id) {
+    $user = DB::table('users')->where('id', $id)->first();
+    
+    return $user->name;
+});
+
+Route::get('eventtypename/{id}', function ($id) {
+    $master_event = DB::table('master_events')->where('master_event_id', $id)->first();
+    
+    return $master_event->type_event_name;
+});
+
 Route::get('users/{id}/image', 'UserController@image');
 
 Route::resource('users', 'UserController');
@@ -40,5 +52,4 @@ Route::resource('payment_types', 'PaymentTypeController');
 Route::get('events/getUsers', 'EventController@getUsers');
 
 Route::resource('events', 'EventController');
-
 

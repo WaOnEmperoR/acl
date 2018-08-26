@@ -13,13 +13,13 @@
     {{ Form::model($event, array('route' => array('events.update', $event->event_id), 'method' => 'PUT')) }} {{-- Form model binding to automatically populate our fields with user data --}}
 
     <div class="form-group">
-        {{ Form::label('event_name', 'Payment Session Name') }}
-        {{ Form::text('event_name', '', array('class' => 'form-control')) }}
+        {{ Form::label('event_name', 'Event Name') }}
+        {{ Form::text('event_name', null, array('class' => 'form-control')) }}
     </div>
     
     <div class="form-group">
         {{ Form::label('event_place', 'Event Place') }}
-        {{ Form::text('event_place', '', array('class' => 'form-control')) }}
+        {{ Form::text('event_place', null, array('class' => 'form-control')) }}
     </div>
 
     <div class="form-group">

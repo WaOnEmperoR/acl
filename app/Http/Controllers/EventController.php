@@ -32,6 +32,12 @@ class EventController extends Controller
     public function index()
     {
         $events = Event::orderby('event_id', 'desc')->paginate(10);
+
+        foreach ($events as $event) {
+            $event->type_event_name = DB::table('master_events')->where('master_event_id', $event->event_type_id)->first()->type_event_name;;
+            $event->name = DB::table('users')->where('id', $event->user_id)->first()->name;
+        }
+
         return view('events.index', compact('events'));
     }
 
@@ -71,8 +77,8 @@ class EventController extends Controller
         $event->event_place = $request['event_place'];
         $event->event_type_id = $request['event_type_id'];
         $event->user_id = $request['user_id'];    
-        $event->event_start = \Carbon\Carbon::createFromFormat('d/m/Y H:m', $request->input('event_start'));
-        $event->event_finish = \Carbon\Carbon::createFromFormat('d/m/Y H:m', $request->input('event_finish'));
+        $event->event_start = \Carbon\Carbon::createFromFormat('d/m/Y H:i', $request->input('event_start'));
+        $event->event_finish = \Carbon\Carbon::createFromFormat('d/m/Y H:i', $request->input('event_finish'));
 
         $event->save();
 
@@ -102,17 +108,20 @@ class EventController extends Controller
      */
     public function edit($id)
     {
+        $users_list = DB::table('users')->get()->pluck('name', 'id');
+        $event_types_list = DB::table('master_events')->get()->pluck('type_event_name', 'master_event_id');
+        
         $event = Event::findOrFail($id);
 
-        $preformat_event_start = \Carbon\Carbon::createFromFormat('Y-m-d', $event->event_start);
-        $postformat_event_start = $preformat_event_start->format('d/m/Y');
-        $preformat_event_finish = \Carbon\Carbon::createFromFormat('Y-m-d', $event->event_finish);
-        $postformat_event_finish = $preformat_event_finish->format('d/m/Y');
+        $preformat_event_start = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $event->event_start);
+        $postformat_event_start = $preformat_event_start->format('d/m/Y H:i');
+        $preformat_event_finish = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $event->event_finish);
+        $postformat_event_finish = $preformat_event_finish->format('d/m/Y H:i');
 
         $event->event_start = $postformat_event_start;
-        $event->event_finish = $postformat_event_finish;  
-
-        return view('events.edit', compact('event'));
+        $event->event_finish = $postformat_event_finish;
+        
+        return view('events.edit', compact('event', 'users_list', 'event_types_list'));
     }
 
     /**
@@ -133,11 +142,11 @@ class EventController extends Controller
             'user_id'=>'required',
         ]);
 
-        $event = PaymentSession::findOrFail($id);
+        $event =Event::findOrFail($id);
         $event->event_name = $request->input('event_name');
         $event->event_place = $request->input('event_place');
-        $event->event_start = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('event_start'));
-        $event->event_finish = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('event_finish'));
+        $event->event_start = \Carbon\Carbon::createFromFormat('d/m/Y H:i', $request->input('event_start'));
+        $event->event_finish = \Carbon\Carbon::createFromFormat('d/m/Y H:i', $request->input('event_finish'));
         $event->event_type_id = $request->input('event_type_id');
         $event->user_id = $request->input('user_id');
         $event->save();
@@ -162,12 +171,6 @@ class EventController extends Controller
             ->with('flash_message',
              'Event successfully deleted.');
     }
+   
 
-    public function getUsers(){
-        $users = DB::table('users')->get();
-
-        $users_list = $users->pluck('id', 'name');
-
-        return $users_list;
-    }
 }
