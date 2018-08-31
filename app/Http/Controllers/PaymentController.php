@@ -4,6 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Http\Requests;
+
+use App\Payment;
+use Auth;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+use Session;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\DB;
+use Intervention\Image\Facades\Image;
+
 class PaymentController extends Controller
 {
 	public function __construct()
@@ -186,7 +198,7 @@ class PaymentController extends Controller
 		    * @param  int  $id
 		    * @return \Illuminate\Http\Response
 		    */
-		    public function destroy($id)
+		    public function destroy($payment_session_id, $payment_type_id, $user_id)
 		    {
 		$payment = DB::table('payments')
 				                    ->where('payment_session_id', $payment_session_id)

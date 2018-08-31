@@ -53,3 +53,5 @@ Route::get('events/getUsers', 'EventController@getUsers');
 
 Route::resource('events', 'EventController');
 
+Route::resource('payments', 'PaymentController');
+
