@@ -33,5 +33,6 @@ class Payment extends Model
     }
         	
 	protected $primaryKey = ['payment_session_id', 'payment_type_id', 'user_id'];
+	
 	public $incrementing = false;
 }
