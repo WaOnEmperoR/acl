@@ -37,11 +37,11 @@ class PaymentController extends Controller
 		    {
 		$payments = Payment::orderby('payment_type_id', 'desc')->paginate(10);
 		
-		foreach ($payments as $payment) {
-			$payment->payment_session_name = DB::table('payment_sessions')->where('payment_session_id', $payment->payment_session_id)->first()->payment_session_name;
-			$payment->payment_type_name = DB::table('payment_types')->where('payment_type_id', $payment->payment_type_id)->first()->payment_name;
-			$payment->user_name = DB::table('users')->where('id', $payment->user_id)->first()->name;
-		}
+		// foreach ($payments as $payment) {
+		// 	$payment->payment_session_name = DB::table('payment_sessions')->where('payment_session_id', $payment->payment_session_id)->first()->payment_session_name;
+		// 	$payment->payment_type_name = DB::table('payment_types')->where('payment_type_id', $payment->payment_type_id)->first()->payment_name;
+		// 	$payment->user_name = DB::table('users')->where('id', $payment->user_id)->first()->name;
+		// }
 		
 		return view('payments.index', compact('payments'));
 	}
@@ -81,16 +81,18 @@ class PaymentController extends Controller
 								            'payment_session_id'=>'required',
 								            'payment_type_id'=>'required',
 								            'user_id'=>'required',
-								            'img_file_proof'=>'mimes:jpeg,bmp,png|size:2048',   
+								            'transfer_image'=>'mimes:jpeg,bmp,png',   
 								        ]);
 		
-		$file = Input::file('img_file_proof');
-		$img = Image::make($file);
+		$file = Input::file('transfer_image');
+        $img = Image::make($file);
 		Response::make($img->encode('jpeg'));
 		
 		$payment = new Payment();
-		$payment->payment_submitted = $request['payment_submitted'];
-		$payment->payment_verified = $request['payment_verified'];
+		$payment->payment_submitted = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('payment_submitted'));
+        $payment->payment_verified = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('payment_verified'));
+		// $payment->payment_submitted = $request['payment_submitted'];
+		// $payment->payment_verified = $request['payment_verified'];
 		$payment->payment_verifier = $request['payment_verifier'];
 		$payment->img_file_proof = $img;
 		$payment->text_file_proof = $request['text_file_proof'];
@@ -99,7 +101,11 @@ class PaymentController extends Controller
 		$payment->payment_session_id = $request['payment_session_id'];
 		$payment->payment_type_id = $request['payment_type_id'];
 		$payment->user_id = $request['user_id'];
-		$payment->img_avatar = $img;
+		$payment->save();
+
+        return redirect()->route('payments.index')
+            ->with('flash_message', 'Payment 
+              created');
 	}
 	
 	
@@ -143,6 +149,14 @@ class PaymentController extends Controller
 								            ->where('user_id', $user_id)
 								            ->first();
 		
+		$preformat_payment_submitted = \Carbon\Carbon::createFromFormat('Y-m-d', $payment->payment_submitted);
+		$postformat_payment_submitted = $preformat_payment_submitted->format('d/m/Y');
+		$preformat_payment_verified = \Carbon\Carbon::createFromFormat('Y-m-d', $payment->payment_verified);
+		$postformat_payment_verified = $preformat_payment_verified->format('d/m/Y');
+
+		$payment->payment_submitted = $postformat_payment_submitted;
+		$payment->payment_verified = $postformat_payment_verified;  
+											
 		return view('payments.edit', compact('payment', 'users_list', 'payment_types_list', 'payment_sessions_list'));
 	}
 	
@@ -162,10 +176,10 @@ class PaymentController extends Controller
 								            'payment_session_id'=>'required',
 								            'payment_type_id'=>'required',
 								            'user_id'=>'required',
-								            'img_file_proof'=>'mimes:jpeg,bmp,png|size:2048',   
+								            'transfer_image'=>'mimes:jpeg,bmp,png|size:2048',   
 								        ]);
 		
-		$file = Input::file('img_file_proof');
+		$file = Input::file('transfer_image');
 		$img = Image::make($file);
 		Response::make($img->encode('jpeg'));
 		
@@ -175,8 +189,10 @@ class PaymentController extends Controller
 								            ->where('user_id', $user_id)
 								            ->first();
 		
-		$payment->payment_submitted = $request['payment_submitted'];
-		$payment->payment_verified = $request['payment_verified'];
+		$payment->payment_submitted = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('payment_submitted'));
+		$payment->payment_verified = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('payment_verified'));
+		// $payment->payment_submitted = $request['payment_submitted'];
+		// $payment->payment_verified = $request['payment_verified'];
 		$payment->payment_verifier = $request['payment_verifier'];
 		$payment->img_file_proof = $img;
 		$payment->text_file_proof = $request['text_file_proof'];

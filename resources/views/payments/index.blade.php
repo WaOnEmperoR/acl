@@ -45,7 +45,7 @@
                     <td>{{ $payment->payment_type_name }}</td>     
                     <td>{{ $payment->user_name }}</td>
                     <td>{{ $payment->verification_status }}</td>
-                    <td>{{ $payment->reection_cause }}</td>    
+                    <td>{{ $payment->rejection_cause }}</td>    
                     <td>{{ $payment->created_at->format('F d, Y h:ia') }}</td>
 
                     <td>

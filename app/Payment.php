@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 class Payment extends Model
 {
 	protected $fillable = [
-			'payment_submitted', 'payment_verified', 'payment_verifier', 'img_file_proof', 'text_file_proof', 'user_id', 'payment_session_id', 'payment_type_id', 'user_id'
+			'payment_submitted', 'payment_verified', 'payment_verifier', 'img_file_proof', 'text_file_proof', 'user_id', 'payment_session_id', 'payment_type_id', 'user_id', 'verification_status', 'rejection_cause'
 		];
 	
 	protected function getKeyForSaveQuery()

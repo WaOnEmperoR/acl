@@ -11,7 +11,7 @@
 
     {{-- @include ('errors.list') --}}
     
-    {{ Form::open(array('url' => 'payments')) }}
+    {{ Form::open(array('url' => 'payments', 'files'=>true)) }}
 
     <div class="form-group">
         {{ Form::label('user_id', 'Payment Sender') }}
