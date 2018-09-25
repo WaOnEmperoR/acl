@@ -14,7 +14,7 @@
 
     <div class="form-group">
         {{ Form::label('payment_session_name', 'Payment Session Name') }}
-        {{ Form::text('payment_session_name', '', array('class' => 'form-control')) }}
+        {{ Form::text('payment_session_name', null, array('class' => 'form-control')) }}
     </div>
     
     <div class="form-group">

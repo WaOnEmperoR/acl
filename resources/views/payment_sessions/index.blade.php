@@ -30,8 +30,8 @@
                 <tr>
                     <td>{{ $counter }}</td>
                     <td>{{ $payment_session->payment_session_name }}</td>    
-                    <td>{{ $payment_session->payment_start_date->format('F d, Y h:ia') }}</td>
-                    <td>{{ $payment_session->payment_finish_date->format('F d, Y h:ia') }}</td>
+                    <td>{{ $payment_session->payment_start_date }}</td>
+                    <td>{{ $payment_session->payment_finish_date }}</td>
                     <td>{{ $payment_session->created_at->format('F d, Y h:ia') }}</td>
 
                     <td>

@@ -53,5 +53,13 @@ Route::get('events/getUsers', 'EventController@getUsers');
 
 Route::resource('events', 'EventController');
 
+Route::resource('users/{id}/image', 'UserController@image');
+
+Route::resource('payments/update/{p_session_id}/{p_type_id}/{user_id}', 'PaymentController@update');
+
+Route::resource('payments/edit/{p_session_id}/{p_type_id}/{user_id}', 'PaymentController@edit');
+
+Route::resource('payments/destroy/{p_session_id}/{p_type_id}/{user_id}', 'PaymentController@destroy');
+
 Route::resource('payments', 'PaymentController');
 

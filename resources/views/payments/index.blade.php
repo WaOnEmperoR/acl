@@ -49,9 +49,9 @@
                     <td>{{ $payment->created_at->format('F d, Y h:ia') }}</td>
 
                     <td>
-                    <a href="{{ route('payments.edit', [$payment->payment_session_id, $payment->type_id, $payment->user_id]) }}" class="btn btn-info pull-left" style="margin-right: 3px;">Edit</a>
+                    <a href="{{ route('payments.edit', [$payment->payment_session_id, $payment->payment_type_id, $payment->user_id]) }}" class="btn btn-info pull-left" style="margin-right: 3px;">Edit</a>
 
-                    {!! Form::open(['method' => 'DELETE', 'route' => ['payments.destroy', [$payment->payment_session_id, $payment->type_id, $payment->user_id]] ]) !!}
+                    {!! Form::open(['method' => 'DELETE', 'route' => ['payments.destroy', $payment->payment_session_id, $payment->payment_type_id, $payment->user_id ]]) !!}
                     {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
                     {!! Form::close() !!}
 
