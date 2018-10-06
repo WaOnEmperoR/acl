@@ -136,7 +136,7 @@ class PaymentController extends Controller
 	*/
 	public function edit($payment_session_id, $payment_type_id, $user_id)
 	{
-		$users_list = DB::table('users')->get()->pluck('name', 'id');
+		$users_list = DB::table('users')->get()->pluck('name', 'user_id');
 		$payment_types_list = DB::table('payment_types')->get()
 										                                ->pluck('payment_name', 'payment_type_id');
 		$payment_sessions_list = DB::table('payment_sessions')->get()

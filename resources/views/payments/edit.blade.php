@@ -10,7 +10,7 @@
     <hr>
     {{-- @include ('errors.list') --}}
 
-    {{ Form::model($payment, array('route' => array('payments.update', [$payment->payment_session_id, $payment->payment_type_id, $payment->user_id]), 'method' => 'PUT')) }} {{-- Form model binding to automatically populate our fields with user data --}}
+    {{ Form::model($payment, array('route' => array('payments.update', $payment->payment_session_id, $payment->payment_type_id, $payment->user_id), 'method' => 'PUT')) }} {{-- Form model binding to automatically populate our fields with user data --}}
 
     <div class="form-group">
         {{ Form::label('user_id', 'Payment Sender') }}
@@ -29,12 +29,12 @@
 
     <div class="form-group">
         {{ Form::label('payment_submitted', 'Payment Submitted Date') }}
-        {{ Form::text('payment_submitted', '', array('id' => 'payment_submitted', 'class' => 'form-control mydatepicker')) }}
+        {{ Form::text('payment_submitted', null, array('id' => 'payment_submitted', 'class' => 'form-control mydatepicker')) }}
     </div>
 
     <div class="form-group">
         {{ Form::label('payment_verified', 'Payment Verified Date') }}
-        {{ Form::text('payment_verified', '', array('id' => 'payment_verified', 'class' => 'form-control mydatepicker')) }}
+        {{ Form::text('payment_verified', null, array('id' => 'payment_verified', 'class' => 'form-control mydatepicker')) }}
     </div>
 
     <div class="form-group">
@@ -44,22 +44,21 @@
 
     <div class="form-group">
         {{ Form::label('transfer_text', 'Transfer Text Proof') }}
-        {{ Form::text('transfer_text', '', array('class' => 'form-control')) }}
+        {{ Form::text('transfer_text', null, array('class' => 'form-control')) }}
     </div>
 
     <div class="form-group">
         {{ Form::label('verification_status', 'Verification Status') }}
-        {{ Form::radio('verification_status', 'C', false }}
-        {{ Form::radio('verification_status', 'R', true }}
+        {{ Form::radio('verification_status', 'C', false) }}
+        {{ Form::radio('verification_status', 'R', true) }}
     </div>
 
     <div class="form-group">
         {{ Form::label('rejection_cause', 'Rejection Cause') }}
-        {{ Form::text('rejection_cause', '', array('class' => 'form-control')) }}
+        {{ Form::text('rejection_cause', null, array('class' => 'form-control')) }}
     </div>
 
-    {{ Form::submit('Edit', array('class' => 'btn btn-primary')) }}
-
+    {{ Form::submit('Update', array('class' => 'btn btn-primary')) }}
     {{ Form::close() }}
 
 </div>

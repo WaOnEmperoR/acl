@@ -55,11 +55,20 @@ Route::resource('events', 'EventController');
 
 Route::resource('users/{id}/image', 'UserController@image');
 
-Route::resource('payments/update/{p_session_id}/{p_type_id}/{user_id}', 'PaymentController@update');
+Route::get('payments/edit/{session_id}/{type_id}/{user_id}', [
+    'as'    => 'payments.edit',
+    'uses'  => 'PaymentController@edit'
+]);
 
-Route::resource('payments/edit/{p_session_id}/{p_type_id}/{user_id}', 'PaymentController@edit');
+Route::put('payments/update/{session_id}/{type_id}/{user_id}', [
+    'as'    => 'payments.update',
+    'uses'  => 'PaymentController@update'
+]);
 
-Route::resource('payments/destroy/{p_session_id}/{p_type_id}/{user_id}', 'PaymentController@destroy');
+Route::get('payments/destroy/{session_id}/{type_id}/{user_id}', [
+    'as'    => 'payments.destroy',
+    'uses'  => 'PaymentController@destroy'
+]);
 
-Route::resource('payments', 'PaymentController');
+Route::resource('payments', 'PaymentController', ['except' => ['edit', 'update', 'destroy']]);
 
