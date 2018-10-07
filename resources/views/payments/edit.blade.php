@@ -14,17 +14,17 @@
 
     <div class="form-group">
         {{ Form::label('user_id', 'Payment Sender') }}
-        {{ Form::select('user_id', $users_list, null) }}
+        {{ Form::select('user_id', $users_list, null, ['class' => 'form-control', 'disabled' => true]) }}
     </div>
 
     <div class="form-group">
         {{ Form::label('payment_type_id', 'Payment Type') }}
-        {{ Form::select('payment_type_id', $payment_types_list, null) }}
+        {{ Form::select('payment_type_id', $payment_types_list, null, ['class' => 'form-control', 'disabled' => true]) }}
     </div>
 
     <div class="form-group">
         {{ Form::label('payment_session_id', 'Payment Session') }}
-        {{ Form::select('payment_session_id', $payment_sessions_list, null) }}
+        {{ Form::select('payment_session_id', $payment_sessions_list, null, ['class' => 'form-control', 'disabled' => true]) }}
     </div>
 
     <div class="form-group">
@@ -43,8 +43,8 @@
     </div>
 
     <div class="form-group">
-        {{ Form::label('transfer_text', 'Transfer Text Proof') }}
-        {{ Form::text('transfer_text', null, array('class' => 'form-control')) }}
+        {{ Form::label('text_file_proof', 'Transfer Text Proof') }}
+        {{ Form::text('text_file_proof', null, array('class' => 'form-control')) }}
     </div>
 
     <div class="form-group">

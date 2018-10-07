@@ -44,8 +44,8 @@
     </div>
 
     <div class="form-group">
-        {{ Form::label('transfer_text', 'Transfer Text Proof') }}
-        {{ Form::text('transfer_text', '', array('class' => 'form-control')) }}
+        {{ Form::label('text_file_proof', 'Transfer Text Proof') }}
+        {{ Form::text('text_file_proof', '', array('class' => 'form-control')) }}
     </div>
 
     <div class="form-group">
