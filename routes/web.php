@@ -65,10 +65,15 @@ Route::put('payments/update/{session_id}/{type_id}/{user_id}', [
     'uses'  => 'PaymentController@update'
 ]);
 
+Route::put('payments/perbaiki/{session_id}/{type_id}/{user_id}', [
+    'as'    => 'payments.perbaiki',
+    'uses'  => 'PaymentController@perbaiki'
+]);
+
 Route::get('payments/destroy/{session_id}/{type_id}/{user_id}', [
     'as'    => 'payments.destroy',
     'uses'  => 'PaymentController@destroy'
 ]);
 
-Route::resource('payments', 'PaymentController', ['except' => ['edit', 'update', 'destroy']]);
+Route::resource('payments', 'PaymentController', ['except' => ['edit', 'update', 'destroy', 'perbaiki']]);
 

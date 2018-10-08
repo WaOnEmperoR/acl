@@ -10,21 +10,21 @@
     <hr>
     {{-- @include ('errors.list') --}}
 
-    {{ Form::model($payment, array('route' => array('payments.update', $payment->payment_session_id, $payment->payment_type_id, $payment->user_id), 'method' => 'PUT')) }} {{-- Form model binding to automatically populate our fields with user data --}}
+    {{ Form::model($payment, array('route' => array('payments.update', $payment->payment_session_id, $payment->payment_type_id, $payment->user_id), 'method' => 'PUT', 'files'=>true)) }} {{-- Form model binding to automatically populate our fields with user data --}}
 
     <div class="form-group">
         {{ Form::label('user_id', 'Payment Sender') }}
-        {{ Form::select('user_id', $users_list, null, ['class' => 'form-control', 'disabled' => true]) }}
+        {{ Form::select('user_id', $users_list, null, ['class' => 'form-control']) }}
     </div>
 
     <div class="form-group">
         {{ Form::label('payment_type_id', 'Payment Type') }}
-        {{ Form::select('payment_type_id', $payment_types_list, null, ['class' => 'form-control', 'disabled' => true]) }}
+        {{ Form::select('payment_type_id', $payment_types_list, null, ['class' => 'form-control']) }}
     </div>
 
     <div class="form-group">
         {{ Form::label('payment_session_id', 'Payment Session') }}
-        {{ Form::select('payment_session_id', $payment_sessions_list, null, ['class' => 'form-control', 'disabled' => true]) }}
+        {{ Form::select('payment_session_id', $payment_sessions_list, null, ['class' => 'form-control']) }}
     </div>
 
     <div class="form-group">
@@ -40,6 +40,10 @@
     <div class="form-group">
         {!! Form::label('transfer_image', 'Transfer Image Proof') !!}
         {!! Form::file('transfer_image') !!}
+        <?php 
+            $my_image = base64_encode( $payment->img_file_proof );
+            echo '<img src="data:image/jpeg;base64,'.$my_image.'"/>';
+        ?>
     </div>
 
     <div class="form-group">

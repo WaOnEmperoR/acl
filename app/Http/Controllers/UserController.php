@@ -2,26 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
-
 use App\User;
-use Auth;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
-use Session;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Response;
 use Intervention\Image\Facades\Image;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    public function __construct() 
+    public function __construct()
     {
         $this->middleware(['auth', 'isAdmin']);
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -42,7 +36,7 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::get();
-        return view('users.create', ['roles'=>$roles]);
+        return view('users.create', ['roles' => $roles]);
     }
 
     /**
@@ -54,20 +48,26 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name'=>'required|max:120',
-            'email'=>'required|email|unique:users',
-            'password'=>'required|min:6|confirmed',
-            'gender'=>'required',
-            'img_avatar'=>'mimes:jpeg,bmp,png|size:2048',   
+            'name' => 'required|max:120',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:6|confirmed',
+            'gender' => 'required',
+            'avatar' => 'nullable|mimes:jpeg,bmp,png|max:2048',
         ]);
 
-        $file = Input::file('avatar');
-        $img = Image::make($file);
-        // resize image to 300x400 and keep the aspect ratio
-        $img->resize(300, 400, function ($constraint) {
-            $constraint->aspectRatio();
-        });
-        Response::make($img->encode('jpeg'));
+        $file_uploaded = false;
+
+        if ($request->hasFile('avatar')) {
+            $file = Input::file('avatar');
+            $img = Image::make($file);
+            // resize image to 300x400 and keep the aspect ratio
+            $img->resize(300, 400, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+            Response::make($img->encode('jpeg'));
+
+            $file_uploaded = true;
+        }
 
         $user = new User();
         $user->name = $request['name'];
@@ -75,24 +75,25 @@ class UserController extends Controller
         $user->password = $request['password'];
         $user->gender = $request['gender'];
         $user->birth_date = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('birth_date'));
-        $user->img_avatar = $img;
+        if ($file_uploaded)
+            $user->img_avatar = $img;
         $user->address = $request['address'];
 
         $user->save();
-  
+
         $roles = $request['roles'];
 
         if (isset($roles)) {
 
             foreach ($roles as $role) {
-            $role_r = Role::where('id', '=', $role)->firstOrFail();            
-            $user->assignRole($role_r);
+                $role_r = Role::where('id', '=', $role)->firstOrFail();
+                $user->assignRole($role_r);
             }
-        }        
+        }
 
         return redirect()->route('users.index')
             ->with('flash_message',
-             'User successfully added.');
+                'User successfully added.');
     }
 
     /**
@@ -120,7 +121,7 @@ class UserController extends Controller
         $preformat_birth_date = \Carbon\Carbon::createFromFormat('Y-m-d', $user->birth_date);
         $postformat_birth_date = $preformat_birth_date->format('d/m/Y');
 
-        $user->birth_date = $postformat_birth_date; 
+        $user->birth_date = $postformat_birth_date;
 
         return view('users.edit', compact('user', 'roles'));
     }
@@ -136,37 +137,43 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         $this->validate($request, [
-            'name'=>'required|max:120',
-            'email'=>'required|email|unique:users,email,'.$id,
-            'password'=>'required|min:6|confirmed',
-            'gender'=>'required',
-            'img_avatar'=>'mimes:jpeg,bmp,png|size:2048',            
+            'name' => 'required|max:120',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'password' => 'required|min:6|confirmed',
+            'gender' => 'required',
+            'avatar' => 'nullable|mimes:jpeg,bmp,png|max:2048',
         ]);
 
-        $file = Input::file('avatar');
-        $img = Image::make($file);
-        // resize image to 300x400 and keep the aspect ratio
-        $img->resize(300, 400, function ($constraint) {
-            $constraint->aspectRatio();
-        });
-        Response::make($img->encode('jpeg'));
-        
+        $file_uploaded = false;
+
+        if ($request->hasFile('avatar')) {
+            $file = Input::file('avatar');
+            $img = Image::make($file);
+            // resize image to 300x400 and keep the aspect ratio
+            $img->resize(300, 400, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+            Response::make($img->encode('jpeg'));
+
+            $file_uploaded = true;
+        }
+
         $input = $request->only(['name', 'email', 'password', 'gender', 'birth_date', 'address']);
         $input['birth_date'] = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('birth_date'));
-        $input['img_avatar'] = $img;
+        if ($file_uploaded)
+            $input['img_avatar'] = $img;
 
         $roles = $request['roles'];
         $user->fill($input)->save();
 
-        if (isset($roles)) {        
-            $user->roles()->sync($roles);            
-        }        
-        else {
+        if (isset($roles)) {
+            $user->roles()->sync($roles);
+        } else {
             $user->roles()->detach();
         }
         return redirect()->route('users.index')
             ->with('flash_message',
-             'User successfully edited.');
+                'User successfully edited.');
     }
 
     /**
@@ -182,18 +189,18 @@ class UserController extends Controller
 
         return redirect()->route('users.index')
             ->with('flash_message',
-             'User successfully deleted.');
+                'User successfully deleted.');
     }
 
-    public function image($id){
+    public function image($id)
+    {
         $user = User::find($id);
 
         $pic = Image::make($user->img_avatar);
         $response = Response::make($pic->encode('jpeg'));
-        $response->header('Content-Type','image/jpeg');
+        $response->header('Content-Type', 'image/jpeg');
 
-        return $response;        
+        return $response;
     }
-
 
 }

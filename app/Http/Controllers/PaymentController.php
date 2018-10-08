@@ -62,7 +62,7 @@ class PaymentController extends Controller
             'payment_session_id' => 'required',
             'payment_type_id' => 'required',
             'user_id' => 'required',
-            'transfer_image' => 'nullable|mimes:jpeg,bmp,png|size:2048',
+            'transfer_image' => 'nullable|mimes:jpeg,bmp,png|max:2048',
         ]);
 
         $file_uploaded = false;
@@ -70,6 +70,10 @@ class PaymentController extends Controller
         if ($request->hasFile('transfer_image')) {
             $file = Input::file('transfer_image');
             $img = Image::make($file);
+            // resize image to 600x800 and keep the aspect ratio
+            $img->resize(600, 800, function ($constraint) {
+                $constraint->aspectRatio();
+            });
             Response::make($img->encode('jpeg'));
 
             $file_uploaded = true;
@@ -151,12 +155,17 @@ class PaymentController extends Controller
      */
     public function update(Request $request, $payment_session_id, $payment_type_id, $user_id)
     {
+        $payment = Payment::where('payment_session_id', $payment_session_id)
+            ->where('payment_type_id', $payment_type_id)
+            ->where('user_id', $user_id)
+            ->first();
+
         $this->validate($request, [
             'payment_submitted' => 'required',
             'payment_session_id' => 'required',
             'payment_type_id' => 'required',
             'user_id' => 'required',
-            'transfer_image' => 'nullable|mimes:jpeg,bmp,png|size:2048',
+            'transfer_image' => 'nullable|mimes:jpeg,bmp,png|max:2048',
         ]);
 
         $file_uploaded = false;
@@ -164,15 +173,14 @@ class PaymentController extends Controller
         if ($request->hasFile('transfer_image')) {
             $file = Input::file('transfer_image');
             $img = Image::make($file);
+            // //resize image to 600x800 and keep the aspect ratio
+            $img->resize(600, 800, function ($constraint) {
+                $constraint->aspectRatio();
+            });
             Response::make($img->encode('jpeg'));
 
             $file_uploaded = true;
         }
-
-        $payment = Payment::where('payment_session_id', $payment_session_id)
-            ->where('payment_type_id', $payment_type_id)
-            ->where('user_id', $user_id)
-            ->first();
 
         $payment->payment_submitted = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('payment_submitted'));
         $payment->payment_verified = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('payment_verified'));
@@ -188,8 +196,7 @@ class PaymentController extends Controller
         $payment->rejection_cause = $request['rejection_cause'];
         $payment->save();
 
-        return redirect()->route('payments.index',
-            $payment->payment_session_id)->with('flash_message',
+        return redirect()->route('payments.index')->with('flash_message',
             'Payment, ' . $payment->user_id . ' updated');
     }
 
@@ -201,8 +208,7 @@ class PaymentController extends Controller
      */
     public function destroy($payment_session_id, $payment_type_id, $user_id)
     {
-        $payment = DB::table('payments')
-            ->where('payment_session_id', $payment_session_id)
+        $payment = Payment::where('payment_session_id', $payment_session_id)
             ->where('payment_type_id', $payment_type_id)
             ->where('user_id', $user_id)
             ->first();

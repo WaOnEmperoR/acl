@@ -25,7 +25,10 @@
     <div class="form-group">
         {!! Form::label('avatar', 'Profile Avatar') !!}
         {!! Form::file('avatar') !!}
-        <img src="image">
+        <?php 
+            $my_image = base64_encode( $user->img_avatar );
+            echo '<img src="data:image/jpeg;base64,'.$my_image.'"/>';
+        ?>
     </div>
     
     <div class="form-group">
