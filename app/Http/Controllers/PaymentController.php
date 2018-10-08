@@ -62,7 +62,7 @@ class PaymentController extends Controller
             'payment_session_id' => 'required',
             'payment_type_id' => 'required',
             'user_id' => 'required',
-            'transfer_image' => 'nullable|mimes:jpeg,bmp,png|max:2048',
+            'transfer_image' => 'nullable|mimes:jpeg,bmp,png|max:512',
         ]);
 
         $file_uploaded = false;
@@ -70,10 +70,6 @@ class PaymentController extends Controller
         if ($request->hasFile('transfer_image')) {
             $file = Input::file('transfer_image');
             $img = Image::make($file);
-            // resize image to 600x800 and keep the aspect ratio
-            $img->resize(600, 800, function ($constraint) {
-                $constraint->aspectRatio();
-            });
             Response::make($img->encode('jpeg'));
 
             $file_uploaded = true;
@@ -129,11 +125,14 @@ class PaymentController extends Controller
         $payment_sessions_list = DB::table('payment_sessions')->get()
             ->pluck('payment_session_name', 'payment_session_id');
 
-        $payment = DB::table('payments')
-            ->where('payment_session_id', $payment_session_id)
+        $payment = Payment::where('payment_session_id', $payment_session_id)
             ->where('payment_type_id', $payment_type_id)
             ->where('user_id', $user_id)
             ->first();
+
+        $payment->username = DB::table('users')->where('id', $user_id)->pluck('name')->first();
+        $payment->payment_type_name = DB::table('payment_types')->where('payment_type_id', $payment_type_id)->pluck('payment_name')->first();
+        $payment->payment_session_name = DB::table('payment_sessions')->where('payment_session_id', $payment_session_id)->pluck('payment_session_name')->first();
 
         $preformat_payment_submitted = \Carbon\Carbon::createFromFormat('Y-m-d', $payment->payment_submitted);
         $postformat_payment_submitted = $preformat_payment_submitted->format('d/m/Y');
@@ -165,7 +164,7 @@ class PaymentController extends Controller
             'payment_session_id' => 'required',
             'payment_type_id' => 'required',
             'user_id' => 'required',
-            'transfer_image' => 'nullable|mimes:jpeg,bmp,png|max:2048',
+            'transfer_image' => 'nullable|mimes:jpeg,bmp,png|max:512',
         ]);
 
         $file_uploaded = false;
@@ -173,10 +172,6 @@ class PaymentController extends Controller
         if ($request->hasFile('transfer_image')) {
             $file = Input::file('transfer_image');
             $img = Image::make($file);
-            // //resize image to 600x800 and keep the aspect ratio
-            $img->resize(600, 800, function ($constraint) {
-                $constraint->aspectRatio();
-            });
             Response::make($img->encode('jpeg'));
 
             $file_uploaded = true;
