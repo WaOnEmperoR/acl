@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Response;
 use Intervention\Image\Facades\Image;
+use Datatables;
 
 class PaymentController extends Controller
 {
@@ -15,6 +16,11 @@ class PaymentController extends Controller
     {
         $this->middleware(['auth', 'clearance'])
             ->except('index', 'show');
+    }
+
+    public function paymentsData()
+    {
+        return Datatables::of(Payment::query())->make(true);
     }
 
     /**
@@ -119,12 +125,6 @@ class PaymentController extends Controller
      */
     public function edit($payment_session_id, $payment_type_id, $user_id)
     {
-        $users_list = DB::table('users')->get()->pluck('name', 'id');
-        $payment_types_list = DB::table('payment_types')->get()
-            ->pluck('payment_name', 'payment_type_id');
-        $payment_sessions_list = DB::table('payment_sessions')->get()
-            ->pluck('payment_session_name', 'payment_session_id');
-
         $payment = Payment::where('payment_session_id', $payment_session_id)
             ->where('payment_type_id', $payment_type_id)
             ->where('user_id', $user_id)
