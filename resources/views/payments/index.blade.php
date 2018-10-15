@@ -37,15 +37,15 @@
                 <tr>
                     <td>{{ $counter }}</td>
                     <td>{{ $payment->payment_submitted }}</td>
-                    <td>{{ $payment->payment_verified }}</td>     
+                    <td>{{ $payment->payment_verified }}</td>
                     <td>{{ $payment->payment_verifier }}</td>
                     <td>{{ $payment->img_file_proof }}</td>
                     <td>{{ $payment->text_file_proof }}</td>
                     <td>{{ $payment->payment_session_name }}</td>
-                    <td>{{ $payment->payment_type_name }}</td>     
+                    <td>{{ $payment->payment_type_name }}</td>
                     <td>{{ $payment->user_name }}</td>
                     <td>{{ $payment->verification_status }}</td>
-                    <td>{{ $payment->rejection_cause }}</td>    
+                    <td>{{ $payment->rejection_cause }}</td>
                     <td>{{ $payment->created_at->format('F d, Y h:ia') }}</td>
 
                     <td>
@@ -65,6 +65,10 @@
             </tbody>
 
         </table>
+    </div>
+
+    <div class="text-center">
+        {!! $payments->links() !!}
     </div>
 
     <a href="{{ route('payments.create') }}" class="btn btn-success">Add payment</a>

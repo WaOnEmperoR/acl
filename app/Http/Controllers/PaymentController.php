@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Response;
 use Intervention\Image\Facades\Image;
-use Datatables;
+use Yajra\Datatables\Datatables;
 
 class PaymentController extends Controller
 {
@@ -30,7 +30,7 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        $payments = Payment::orderby('payment_type_id', 'desc')->paginate(10);
+        $payments = Payment::orderby('payment_type_id', 'desc')->paginate(2);
 
         foreach ($payments as $payment) {
             $payment->payment_session_name = DB::table('payment_sessions')->where('payment_session_id', $payment->payment_session_id)->first()->payment_session_name;
@@ -38,7 +38,7 @@ class PaymentController extends Controller
             $payment->user_name = DB::table('users')->where('id', $payment->user_id)->first()->name;
         }
 
-        return view('payments.index', compact('payments'));
+        return view('payments.index_yajra', compact('payments'));
     }
 
     /**

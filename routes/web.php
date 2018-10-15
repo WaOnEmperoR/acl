@@ -18,7 +18,7 @@ Route::get('/', function () {
 Auth::routes();
 
 //Route::get('/home', 'HomeController@index');
-//
+
 Route::get('/', 'PostController@index')->name('home');
 
 Route::get('username/{id}', function ($id) {
@@ -69,6 +69,8 @@ Route::get('payments/destroy/{session_id}/{type_id}/{user_id}', [
     'as'    => 'payments.destroy',
     'uses'  => 'PaymentController@destroy'
 ]);
+
+Route::get('payments/paymentsData', 'PaymentController@paymentsData');
 
 Route::resource('payments', 'PaymentController', ['except' => ['edit', 'update', 'destroy']]);
 
