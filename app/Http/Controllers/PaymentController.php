@@ -20,7 +20,19 @@ class PaymentController extends Controller
 
     public function paymentsData()
     {
-        return Datatables::of(Payment::query())->make(true);
+        $payments = Payment::query();
+
+        return Datatables::of($payments)
+            ->addColumn('action', function ($payment) {
+                return '<a href="payments/edit/'.$payment->payment_session_id.'/'.$payment->payment_type_id.'/'.$payment->user_id.
+                    '" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Edit</a>';
+            })
+            ->make(true);
+    }
+
+    public function getAddEditRemoveColumn()
+    {
+        return view('datatables.eloquent.add-edit-remove-column');
     }
 
     /**

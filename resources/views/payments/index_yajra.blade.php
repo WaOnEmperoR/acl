@@ -18,6 +18,7 @@
                     <th>Payment Session ID</th>
                     <th>Payment ID</th>
                     <th>User ID</th>
+                    <th>Action</th>
                 </tr>
             </thead>
         </table>
@@ -40,6 +41,7 @@
                 { data: 'payment_session_id', name: 'payment_session_id' },
                 { data: 'payment_type_id', name: 'payment_type_id' },
                 { data: 'user_id', name: 'user_id' },
+                { data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
     });

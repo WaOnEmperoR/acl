@@ -56,9 +56,17 @@
     </div>
 
     <div class="form-group">
-        {{ Form::label('verification_status', 'Verification Status') }}
+        {{ Form::label('verification_label', 'Verification Status') }}
+        {!! '<br>' !!}        
         {{ Form::radio('verification_status', 'C', false) }}
+        {{ Form::label('verification_status', 'Confirmed') }}
+        {!! '<br>' !!}
         {{ Form::radio('verification_status', 'R', true) }}
+        {{ Form::label('verification_status', 'Rejected') }}        
+    </div>
+
+    <div class="form-group">
+        
     </div>
 
     <div class="form-group">
