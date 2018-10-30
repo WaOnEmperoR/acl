@@ -15,6 +15,7 @@
     {{ Form::hidden('payment_session_id', $payment->payment_session_id) }}
     {{ Form::hidden('payment_type_id', $payment->payment_type_id) }}
     {{ Form::hidden('user_id', $payment->user_id) }}
+    
 
     <div class="form-group">
         {{ Form::label('user_name', 'Payment Sender') }}
@@ -46,13 +47,14 @@
         {!! Form::file('transfer_image') !!}
         <?php
             $my_image = base64_encode($payment->img_file_proof);
-            echo '<img src="data:image/jpeg;base64,' . $my_image . '"/>';
+            echo '<img id="imgPreview" name="imgPreview" src="data:image/jpeg;base64,' . $my_image . '"/>';
         ?>
+        {{ Form::hidden('payment_img', $my_image) }}
     </div>
 
     <div class="form-group">
         {{ Form::label('text_file_proof', 'Transfer Text Proof') }}
-        {{ Form::text('text_file_proof', null, array('class' => 'form-control')) }}
+        {{ Form::textarea('text_file_proof', null, array('class' => 'form-control', 'rows' => 4)) }}
     </div>
 
     <div class="form-group">
@@ -66,12 +68,8 @@
     </div>
 
     <div class="form-group">
-        
-    </div>
-
-    <div class="form-group">
         {{ Form::label('rejection_cause', 'Rejection Cause') }}
-        {{ Form::text('rejection_cause', null, array('class' => 'form-control')) }}
+        {{ Form::textarea('rejection_cause', null, array('class' => 'form-control', 'rows' => 4)) }}
     </div>
 
     {{ Form::submit('Update', array('class' => 'btn btn-primary')) }}

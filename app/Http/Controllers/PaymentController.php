@@ -24,8 +24,10 @@ class PaymentController extends Controller
 
         return Datatables::of($payments)
             ->addColumn('action', function ($payment) {
-                return '<a href="payments/edit/'.$payment->payment_session_id.'/'.$payment->payment_type_id.'/'.$payment->user_id.
-                    '" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Edit</a>';
+                return '<a href="payments/edit/' . $payment->payment_session_id . '/' . $payment->payment_type_id . '/' . $payment->user_id .
+                    '" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Edit</a>'.
+                    '<a href="payments/delete/' . $payment->payment_session_id . '/' . $payment->payment_type_id . '/' . $payment->user_id .
+                    '" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-delete"></i> Delete</a>';
             })
             ->make(true);
     }
@@ -80,7 +82,10 @@ class PaymentController extends Controller
             'payment_session_id' => 'required',
             'payment_type_id' => 'required',
             'user_id' => 'required',
-            'transfer_image' => 'nullable|mimes:jpeg,bmp,png|max:512',
+            'transfer_image' => 'required_without_all:text_file_proof|mimes:jpeg,bmp,png|max:512',
+            'text_file_proof' => 'required_without_all:transfer_image',
+            'verification_status' => 'required',
+            'rejection_cause' => 'required_if:verification_status,R',
         ]);
 
         $file_uploaded = false;
@@ -154,7 +159,7 @@ class PaymentController extends Controller
         $payment->payment_submitted = $postformat_payment_submitted;
         $payment->payment_verified = $postformat_payment_verified;
 
-        return view('payments.edit', compact('payment', 'users_list', 'payment_types_list', 'payment_sessions_list'));
+        return view('payments.edit', compact('payment'));
     }
 
     /**
@@ -176,7 +181,10 @@ class PaymentController extends Controller
             'payment_session_id' => 'required',
             'payment_type_id' => 'required',
             'user_id' => 'required',
-            'transfer_image' => 'nullable|mimes:jpeg,bmp,png|max:512',
+            'transfer_image' => 'required_without_all:text_file_proof,payment_img|mimes:jpeg,bmp,png|max:512',
+            'text_file_proof' => 'required_without_all:transfer_image,payment_img',
+            'verification_status' => 'required',
+            'rejection_cause' => 'required_if:verification_status,R',
         ]);
 
         $file_uploaded = false;
