@@ -26,8 +26,8 @@ class PaymentController extends Controller
             ->addColumn('action', function ($payment) {
                 return '<a href="payments/edit/' . $payment->payment_session_id . '/' . $payment->payment_type_id . '/' . $payment->user_id .
                     '" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Edit</a>'.
-                    '<a href="payments/delete/' . $payment->payment_session_id . '/' . $payment->payment_type_id . '/' . $payment->user_id .
-                    '" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-delete"></i> Delete</a>';
+                    '<a href="payments/destroy/' . $payment->payment_session_id . '/' . $payment->payment_type_id . '/' . $payment->user_id .
+                    '" class="btn btn-danger btn-primary"><i class="glyphicon glyphicon-delete"></i> Delete</a>';
             })
             ->make(true);
     }
@@ -53,6 +53,7 @@ class PaymentController extends Controller
         }
 
         return view('payments.index_yajra', compact('payments'));
+        // return view('payments.index', compact('payments'));
     }
 
     /**
@@ -82,6 +83,8 @@ class PaymentController extends Controller
             'payment_session_id' => 'required',
             'payment_type_id' => 'required',
             'user_id' => 'required',
+            'payment_submitted' => 'required',
+            'payment_verified' => 'required',
             'transfer_image' => 'required_without_all:text_file_proof|mimes:jpeg,bmp,png|max:512',
             'text_file_proof' => 'required_without_all:transfer_image',
             'verification_status' => 'required',
@@ -181,6 +184,8 @@ class PaymentController extends Controller
             'payment_session_id' => 'required',
             'payment_type_id' => 'required',
             'user_id' => 'required',
+            'payment_submitted' => 'required',
+            'payment_verified' => 'required',
             'transfer_image' => 'required_without_all:text_file_proof,payment_img|mimes:jpeg,bmp,png|max:512',
             'text_file_proof' => 'required_without_all:transfer_image,payment_img',
             'verification_status' => 'required',

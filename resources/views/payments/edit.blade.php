@@ -15,7 +15,7 @@
     {{ Form::hidden('payment_session_id', $payment->payment_session_id) }}
     {{ Form::hidden('payment_type_id', $payment->payment_type_id) }}
     {{ Form::hidden('user_id', $payment->user_id) }}
-    
+
 
     <div class="form-group">
         {{ Form::label('user_name', 'Payment Sender') }}
@@ -45,10 +45,10 @@
     <div class="form-group">
         {!! Form::label('transfer_image', 'Transfer Image Proof') !!}
         {!! Form::file('transfer_image') !!}
-        <?php
+        @php
             $my_image = base64_encode($payment->img_file_proof);
             echo '<img id="imgPreview" name="imgPreview" src="data:image/jpeg;base64,' . $my_image . '"/>';
-        ?>
+        @endphp
         {{ Form::hidden('payment_img', $my_image) }}
     </div>
 
@@ -59,12 +59,12 @@
 
     <div class="form-group">
         {{ Form::label('verification_label', 'Verification Status') }}
-        {!! '<br>' !!}        
+        {!! '<br>' !!}
         {{ Form::radio('verification_status', 'C', false) }}
         {{ Form::label('verification_status', 'Confirmed') }}
         {!! '<br>' !!}
         {{ Form::radio('verification_status', 'R', true) }}
-        {{ Form::label('verification_status', 'Rejected') }}        
+        {{ Form::label('verification_status', 'Rejected') }}
     </div>
 
     <div class="form-group">
@@ -77,5 +77,23 @@
 
 </div>
 
-@endsection
+<script>
+    $(function () {
+        $("#payment_submitted").datepicker({
+            onSelect: function (selected) {
+                var dt = new Date(selected);
+                dt.setDate(dt.getDate() + 1);
+                $("#payment_verified").datepicker("option", "minDate", dt);
+            }
+        });
+        $("#payment_verified").datepicker({
+            onSelect: function (selected) {
+                var dt = new Date(selected);
+                dt.setDate(dt.getDate() - 1);
+                $("#payment_submitted").datepicker("option", "maxDate", dt);
+            }
+        });
+    });
+</script>
 
+@endsection

@@ -50,10 +50,7 @@
 
                     <td>
                     <a href="{{ route('payments.edit', [$payment->payment_session_id, $payment->payment_type_id, $payment->user_id]) }}" class="btn btn-info pull-left" style="margin-right: 3px;">Edit</a>
-
-                    {!! Form::open(['method' => 'DELETE', 'route' => ['payments.destroy', $payment->payment_session_id, $payment->payment_type_id, $payment->user_id ]]) !!}
-                    {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
-                    {!! Form::close() !!}
+                    <a href="{{ route('payments.destroy', [$payment->payment_session_id, $payment->payment_type_id, $payment->user_id]) }}" class="btn btn-danger pull-right" style="margin-right: 3px;">Delete</a>
 
                     @php
                         $counter = $counter + 1;

@@ -45,23 +45,47 @@
 
     <div class="form-group">
         {{ Form::label('text_file_proof', 'Transfer Text Proof') }}
-        {{ Form::text('text_file_proof', '', array('class' => 'form-control')) }}
+        {{ Form::textarea('text_file_proof', null, array('class' => 'form-control', 'rows' => 4)) }}
     </div>
 
     <div class="form-group">
-        {{ Form::label('verification_status', 'Verification Status') }}
+        {{ Form::label('verification_label', 'Verification Status') }}
+        {!! '<br>' !!}        
         {{ Form::radio('verification_status', 'C', false) }}
+        {{ Form::label('verification_status', 'Confirmed') }}
+        {!! '<br>' !!}
         {{ Form::radio('verification_status', 'R', true) }}
+        {{ Form::label('verification_status', 'Rejected') }}        
     </div>
+
 
     <div class="form-group">
         {{ Form::label('rejection_cause', 'Rejection Cause') }}
-        {{ Form::text('rejection_cause', '', array('class' => 'form-control')) }}
-    </div> 
+        {{ Form::textarea('rejection_cause', null, array('class' => 'form-control', 'rows' => 4)) }}
+    </div>
 
     {{ Form::submit('Add', array('class' => 'btn btn-primary')) }}
 
     {{ Form::close() }}
 </div>
+
+<script>
+    $(function () {
+        $("#payment_submitted").datepicker({
+            onSelect: function (selected) {
+                var dt = new Date(selected);
+                dt.setDate(dt.getDate() + 1);
+                $("#payment_verified").datepicker("option", "minDate", dt);
+            }
+        });
+        $("#payment_verified").datepicker({
+            onSelect: function (selected) {
+                var dt = new Date(selected);
+                dt.setDate(dt.getDate() - 1);
+                $("#payment_submitted").datepicker("option", "maxDate", dt);
+            }
+        });
+    });
+</script>
 
 @endsection
