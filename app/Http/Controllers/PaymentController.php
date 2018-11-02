@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -23,6 +24,18 @@ class PaymentController extends Controller
         $payments = Payment::query();
 
         return Datatables::of($payments)
+            ->addColumn('payment_session_name', function($payment) {
+                return DB::table('payment_sessions')->where('payment_session_id', $payment->payment_session_id)->first()->payment_session_name;
+            })
+            ->addColumn('payment_type_name', function($payment) {
+                return DB::table('payment_types')->where('payment_type_id', $payment->payment_type_id)->first()->payment_name;
+            })
+            ->addColumn('user_name', function($payment) {
+                return DB::table('users')->where('id', $payment->user_id)->first()->name;
+            })
+            ->addColumn('payment_verifier_name', function($payment) {
+                return DB::table('users')->where('id', $payment->payment_verifier)->first()->name;
+            })
             ->addColumn('action', function ($payment) {
                 return '<a href="payments/edit/' . $payment->payment_session_id . '/' . $payment->payment_type_id . '/' . $payment->user_id .
                     '" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Edit</a>'.
@@ -44,16 +57,17 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        $payments = Payment::orderby('payment_type_id', 'desc')->paginate(2);
+        // $payments = Payment::orderby('payment_type_id', 'desc')->paginate(2);
 
-        foreach ($payments as $payment) {
-            $payment->payment_session_name = DB::table('payment_sessions')->where('payment_session_id', $payment->payment_session_id)->first()->payment_session_name;
-            $payment->payment_type_name = DB::table('payment_types')->where('payment_type_id', $payment->payment_type_id)->first()->payment_name;
-            $payment->user_name = DB::table('users')->where('id', $payment->user_id)->first()->name;
-        }
+        // foreach ($payments as $payment) {
+        //     $payment->payment_session_name = DB::table('payment_sessions')->where('payment_session_id', $payment->payment_session_id)->first()->payment_session_name;
+        //     $payment->payment_type_name = DB::table('payment_types')->where('payment_type_id', $payment->payment_type_id)->first()->payment_name;
+        //     $payment->user_name = DB::table('users')->where('id', $payment->user_id)->first()->name;
+        // }
 
-        return view('payments.index_yajra', compact('payments'));
         // return view('payments.index', compact('payments'));
+
+        return view('payments.index_yajra');        
     }
 
     /**
@@ -115,6 +129,7 @@ class PaymentController extends Controller
         $payment->rejection_cause = $request['rejection_cause'];
         $payment->payment_session_id = $request['payment_session_id'];
         $payment->payment_type_id = $request['payment_type_id'];
+        $payment->payment_verifier = Auth::user()->id;
         $payment->user_id = $request['user_id'];
 
         $payment->save();
@@ -214,6 +229,7 @@ class PaymentController extends Controller
         $payment->text_file_proof = $request['text_file_proof'];
         $payment->verification_status = $request['verification_status'];
         $payment->rejection_cause = $request['rejection_cause'];
+        $payment->payment_verifier = Auth::user()->id;
         $payment->save();
 
         return redirect()->route('payments.index')->with('flash_message',

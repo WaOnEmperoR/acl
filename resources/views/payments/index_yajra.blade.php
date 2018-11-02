@@ -14,10 +14,10 @@
                 <tr>
                     <th>Payment Submitted</th>
                     <th>Payment Verified</th>
-                    <th>Payment verifier</th>
-                    <th>Payment Session ID</th>
-                    <th>Payment ID</th>
-                    <th>User ID</th>
+                    <th>Payment Verifier</th>
+                    <th>Payment Session Name</th>
+                    <th>Payment Name</th>
+                    <th>Payer</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -37,10 +37,10 @@
             columns: [
                 { data: 'payment_submitted', name: 'payment_submitted' },
                 { data: 'payment_verified', name: 'payment_verified' },
-                { data: 'payment_verifier', name: 'payment_verifier' },
-                { data: 'payment_session_id', name: 'payment_session_id' },
-                { data: 'payment_type_id', name: 'payment_type_id' },
-                { data: 'user_id', name: 'user_id' },
+                { data: 'payment_verifier_name', name: 'payment_verifier_name' },
+                { data: 'payment_session_name', name: 'payment_session_name' },
+                { data: 'payment_type_name', name: 'payment_type_name' },
+                { data: 'user_name', name: 'user_name' },
                 { data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
