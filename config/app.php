@@ -183,6 +183,7 @@ return [
         Collective\Html\HtmlServiceProvider::class,
 
         Yajra\DataTables\DataTablesServiceProvider::class,
+        Laravel\Passport\PassportServiceProvider::class,
     ],
 
     /*
