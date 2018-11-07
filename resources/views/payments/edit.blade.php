@@ -93,6 +93,16 @@
                 $("#payment_submitted").datepicker("option", "maxDate", dt);
             }
         });
+
+        $('input:radio[name=verification_status]').change(function() {
+            if (this.value == 'C') {
+                $("#rejection_cause").prop('disabled', true);
+                $( "textarea#rejection_cause" ).val("");
+            }
+            else if (this.value == 'R') {
+                $("#rejection_cause").prop('disabled', false);
+            }
+        });
     });
 </script>
 

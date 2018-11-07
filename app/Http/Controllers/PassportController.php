@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -65,6 +66,7 @@ class PassportController extends Controller
      */
     public function details()
     {
-        return response()->json(['user' => auth()->user()], 200);
+        // return response()->json(['user' => Auth::user()->id], 200);
+        return response()->json(['user' => Auth::user()->id], 200);
     }
 }
