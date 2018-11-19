@@ -20,7 +20,7 @@ class PaymentTypeController extends Controller
     public function __construct()
     {
         $this->middleware(['auth', 'clearance'])
-            ->except('index', 'show');
+            ->except('index', 'show', 'getPaymentTypes');
     }
 
     /**
@@ -129,5 +129,12 @@ class PaymentTypeController extends Controller
         return redirect()->route('payment_types.index')
             ->with('flash_message',
              'Payment Type successfully deleted.');
+    }
+
+    public function getPaymentTypes()
+    {
+        $payment_types = PaymentType::select('payment_type_id', 'payment_name')->get();
+
+        return response()->json(['payment_types' => $payment_types], 200);
     }
 }

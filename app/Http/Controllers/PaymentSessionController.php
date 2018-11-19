@@ -20,7 +20,7 @@ class PaymentSessionController extends Controller
     public function __construct()
     {
         $this->middleware(['auth', 'clearance'])
-            ->except('index', 'show');
+            ->except('index', 'show', 'getPaymentSessions');
     }
     /**
      * Display a listing of the resource.
@@ -144,4 +144,12 @@ class PaymentSessionController extends Controller
             ->with('flash_message',
              'Payment Session successfully deleted.');
     }
+
+    public function getPaymentSessions()
+    {
+        $payment_sessions = PaymentSession::select('payment_session_id', 'payment_session_name', 'payment_start_date', 'payment_finish_date')->get();
+        
+        return response()->json(['payment_sessions' => $payment_sessions], 200);
+    }
+    
 }

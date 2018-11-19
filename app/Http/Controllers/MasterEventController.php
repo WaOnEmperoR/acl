@@ -20,7 +20,7 @@ class MasterEventController extends Controller
     public function __construct()
     {
         $this->middleware(['auth', 'clearance'])
-            ->except('index', 'show');
+            ->except('index', 'show', 'getMasterEvents');
     }
 
     /**
@@ -129,5 +129,12 @@ class MasterEventController extends Controller
         return redirect()->route('master_events.index')
             ->with('flash_message',
              'Master Event successfully deleted.');
+    }
+
+    public function getMasterEvents()
+    {
+        $master_events = MasterEvent::select('master_event_id', 'type_event_name')->get();
+        
+        return response()->json(['master_events' => $master_events], 200);
     }
 }

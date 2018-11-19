@@ -21,7 +21,7 @@ class EventController extends Controller
     public function __construct()
     {
         $this->middleware(['auth', 'clearance'])
-            ->except('index', 'show');
+            ->except('index', 'show', 'eventsAhead');
     }
 
     /**
@@ -170,6 +170,18 @@ class EventController extends Controller
         return redirect()->route('events.index')
             ->with('flash_message',
              'Event successfully deleted.');
+    }
+
+    public function eventsAhead()
+    {
+        $events = Event::whereDate('event_start', '<', \Carbon\Carbon::now())->orderby('event_start', 'asc')->get();
+
+        foreach ($events as $event) {
+            $event->type_event_name = DB::table('master_events')->where('master_event_id', $event->event_type_id)->first()->type_event_name;;
+            $event->name = DB::table('users')->where('id', $event->user_id)->first()->name;
+        }
+
+        return response()->json(['events' => $events], 200);
     }
    
 
