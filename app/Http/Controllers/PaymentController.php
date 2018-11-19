@@ -255,4 +255,58 @@ class PaymentController extends Controller
             ->with('flash_message',
                 'Payment successfully deleted.');
     }
+
+    public function getPaymentUser()
+    {
+        $payments = Payment::where('user_id', Auth::user()->id)->select('payment_submitted', 'payment_verified', 'payment_session_id', 'payment_type_id', 'user_id', 'rejection_cause', 'img_file_proof')->get();
+
+        foreach ($payments as $payment) {
+            $payment->payment_session_name = DB::table('payment_sessions')->where('payment_session_id', $payment->payment_session_id)->first()->payment_session_name;
+            $payment->payment_type_name = DB::table('payment_types')->where('payment_type_id', $payment->payment_type_id)->first()->payment_name;
+            $payment->user_name = DB::table('users')->where('id', $payment->user_id)->first()->name;
+            $payment->img_file_proof = base64_encode($payment->img_file_proof);
+        }
+
+        return response()->json(['payments' => $payments], 200);    
+    }
+
+    public function submitPaymentUser(Request $request)
+    {
+        $this->validate($request, [
+            'payment_session_id' => 'required',
+            'payment_type_id' => 'required',
+            'transfer_image' => 'required_without_all:text_file_proof|mimes:jpeg,bmp,png|max:512',
+            'text_file_proof' => 'required_without_all:transfer_image',
+        ]);
+
+        $file_uploaded = false;
+
+        if ($request->hasFile('transfer_image')) {
+            $file = Input::file('transfer_image');
+            $img = Image::make($file);
+            Response::make($img->encode('jpeg'));
+
+            $file_uploaded = true;
+        }
+
+        $payment = new Payment();
+        $payment->payment_submitted = \Carbon\Carbon::now();
+        if ($file_uploaded) {
+            $payment->img_file_proof = $img;
+        }
+        $payment->text_file_proof = $request['text_file_proof'];
+        $payment->payment_session_id = $request['payment_session_id'];
+        $payment->payment_type_id = $request['payment_type_id'];
+        $payment->user_id = Auth::user()->id;
+
+        if ($payment->save())
+        {
+            return response()->json(['success' => 'Payment Saved'], 200);
+        }
+        else
+        {
+            return response()->json(['error' => 'Payment Insertion Failed'], 401);    
+        }
+
+    }
 }

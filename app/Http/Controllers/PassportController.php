@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Auth;
 use App\User;
+use App\Payment;
 use Illuminate\Http\Request;
 
 class PassportController extends Controller
@@ -66,7 +67,16 @@ class PassportController extends Controller
      */
     public function details()
     {
-        // return response()->json(['user' => Auth::user()->id], 200);
-        return response()->json(['user' => Auth::user()->id], 200);
+        $user_data = array(
+            'id'        => Auth::user()->id,
+            'name'      => Auth::user()->name,
+            'email'     => Auth::user()->email,
+            'gender'    => Auth::user()->gender,
+            'birth_date'=> Auth::user()->birth_date,
+            'address'   => Auth::user()->address,
+            'img_avatar'=> base64_encode(Auth::user()->img_avatar),
+        );
+        return response()->json(['user' => $user_data], 200);
     }
+
 }
