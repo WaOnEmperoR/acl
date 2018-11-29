@@ -19,13 +19,13 @@ use Illuminate\Http\Request;
 
 Route::post('login', 'PassportController@login');
 Route::post('register', 'PassportController@register');
-Route::get('get_events', 'EventController@eventsAhead');
+Route::get('get_events/{begin}/{end}', 'EventController@eventsAhead');
 Route::get('get_master_events', 'MasterEventController@getMasterEvents');
 Route::get('get_payment_sessions', 'PaymentSessionController@getPaymentSessions');
 Route::get('get_payment_types', 'PaymentTypeController@getPaymentTypes');
  
 Route::middleware('auth:api')->group(function () {
     Route::get('user', 'PassportController@details');
-    Route::get('payment', 'PaymentController@getPaymentUser');
+    Route::get('payment/{begin}/{end}', 'PaymentController@getPaymentUser');
     Route::post('payment_submit', 'PaymentController@submitPaymentUser');
 });

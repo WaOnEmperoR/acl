@@ -256,9 +256,9 @@ class PaymentController extends Controller
                 'Payment successfully deleted.');
     }
 
-    public function getPaymentUser()
+    public function getPaymentUser($begin, $end)
     {
-        $payments = Payment::where('user_id', Auth::user()->id)->select('payment_submitted', 'payment_verified', 'payment_session_id', 'payment_type_id', 'user_id', 'rejection_cause', 'img_file_proof')->get();
+        $payments = Payment::where('user_id', Auth::user()->id)->select('payment_submitted', 'payment_verified', 'payment_session_id', 'payment_type_id', 'user_id', 'rejection_cause', 'img_file_proof')->skip($begin)->take($end)->get();
 
         foreach ($payments as $payment) {
             $payment->payment_session_name = DB::table('payment_sessions')->where('payment_session_id', $payment->payment_session_id)->first()->payment_session_name;

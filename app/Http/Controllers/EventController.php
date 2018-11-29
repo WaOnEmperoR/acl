@@ -172,9 +172,9 @@ class EventController extends Controller
              'Event successfully deleted.');
     }
 
-    public function eventsAhead()
+    public function eventsAhead($begin, $end)
     {
-        $events = Event::whereDate('event_start', '<', \Carbon\Carbon::now())->orderby('event_start', 'asc')->get();
+        $events = Event::whereDate('event_start', '<', \Carbon\Carbon::now())->orderby('event_start', 'asc')->skip($begin)->take($end)->get();
 
         foreach ($events as $event) {
             $event->type_event_name = DB::table('master_events')->where('master_event_id', $event->event_type_id)->first()->type_event_name;;
