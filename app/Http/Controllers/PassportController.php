@@ -76,7 +76,7 @@ class PassportController extends Controller
             'address'   => Auth::user()->address,
             'img_avatar'=> base64_encode(Auth::user()->img_avatar),
         );
-        return response()->json(['user' => $user_data], 200);
+        return response()->json($user_data, 200);
     }
 
 }

@@ -21,6 +21,7 @@ Route::post('login', 'PassportController@login');
 Route::post('register', 'PassportController@register');
 Route::get('get_events/{begin}/{end}', 'EventController@eventsAhead');
 Route::get('get_master_events', 'MasterEventController@getMasterEvents');
+Route::get('get_number', 'MasterEventController@testNumber');
 Route::get('get_payment_sessions', 'PaymentSessionController@getPaymentSessions');
 Route::get('get_payment_types', 'PaymentTypeController@getPaymentTypes');
  

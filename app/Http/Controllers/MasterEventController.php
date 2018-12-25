@@ -20,7 +20,7 @@ class MasterEventController extends Controller
     public function __construct()
     {
         $this->middleware(['auth', 'clearance'])
-            ->except('index', 'show', 'getMasterEvents');
+            ->except('index', 'show', 'getMasterEvents', 'testNumber');
     }
 
     /**
@@ -136,5 +136,10 @@ class MasterEventController extends Controller
         $master_events = MasterEvent::select('master_event_id', 'type_event_name')->get();
         
         return response()->json(['master_events' => $master_events], 200);
+    }
+
+    public function testNumber()
+    {
+        return response()->json(['number' => 200], 200);
     }
 }

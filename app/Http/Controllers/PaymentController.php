@@ -270,6 +270,26 @@ class PaymentController extends Controller
         return response()->json(['payments' => $payments], 200);    
     }
 
+    public function getBillUser()
+    {
+        $payments = DB::statement(
+            "select left_table.payment_type_id, left_table.payment_session_id,left_table.payment_name, left_table.payment_session_name,
+            right_table.payment_type_id, right_table.payment_session_id
+            FROM
+            (SELECT pt.payment_type_id, ps.payment_session_id, pt.payment_name, ps.payment_session_name
+            FROM payment_types pt, payment_sessions ps) left_table
+            LEFT JOIN
+            (SELECT p.payment_type_id, p.payment_session_id
+            FROM payments p
+            WHERE p.user_id = ".Auth::user()->id.") right_table
+            ON left_table.payment_type_id=right_table.payment_type_id AND left_table.payment_session_id=right_table.payment_session_id
+            WHERE right_table.payment_type_id IS NULL AND right_table.payment_session_id IS NULL
+            ORDER BY left_table.payment_type_id ASC, left_table.payment_session_id ASC
+            "    
+        );
+
+    }
+
     public function submitPaymentUser(Request $request)
     {
         $this->validate($request, [
